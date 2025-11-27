@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE WOJAK</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #999999;
+            --accent-color: #ffffff;
+            --font-stack: 'Courier New', Courier, monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-stack);
+            font-size: 12px; /* Slightly smaller to fit the wall of text */
+            line-height: 1.5;
+            padding: 40px;
+            overflow-x: hidden;
+        }
+
+        /* FIXED TOP RIGHT INFO */
+        .top-right {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            text-align: right;
+            z-index: 100;
+            background: rgba(5,5,5,0.8);
+            padding: 10px;
+        }
+
+        .social-link {
+            display: block;
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .ca-display {
+            font-size: 11px;
+            color: #555;
+            cursor: pointer;
+        }
+        .ca-display:hover { color: #fff; }
+
+        /* LAYOUT */
+        .wrapper {
+            display: flex;
+            gap: 40px;
+            max-width: 100%;
+        }
+
+        /* LEFT STICKY IMAGE */
+        .left-col {
+            width: 180px;
+            flex-shrink: 0;
+        }
+
+        .sticky-logo {
+            position: sticky;
+            top: 40px;
+            width: 100%;
+            height: auto;
+            border: 1px solid #222;
+        }
+
+        /* RIGHT LIST */
+        .right-col {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .line {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            opacity: 0.7;
+            transition: 0.2s;
+        }
+
+        .line:hover {
+            opacity: 1;
+            color: var(--accent-color);
+            padding-left: 5px; /* Slight movement on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-right">
+        <a href="https://twitter.com/TheWojakCoin" target="_blank" class="social-link">TWITTER</a>
+        <div class="ca-display" onclick="copyCA()">CA: 8xHt...9jKm</div>
+    </div>
+
+    <div class="wrapper">
+        <div class="left-col">
+            <!-- Ensure logo.png is in the folder -->
+            <img src="a.png" alt="The Wojak" class="sticky-logo">
+        </div>
+
+        <div class="right-col" id="list-container">
+            <!-- 1000 Lines injected here -->
+        </div>
+    </div>
+
+    <script>
+        // A MASSIVE list of "The Wojak doesn't concern himself with..."
+        const phrases = [
+            "charts", "TA", "LFGs", "wallet balances", "coin listings", "staking rewards", "dead projects", 
+            "gas wars", "faucets", "employment", "rent payments", "social norms", "the opinions of sheep", 
+            "the dip", "the pump", "market cap", "fully diluted valuation", "tokenomics", "roadmaps", 
+            "whitepapers", "KYC", "audits", "developers", "rug pulls", "honeypots", "liquidity locks", 
+            "impermanent loss", "yield farming", "flash loans", "MEV bots", "front running", "slippage", 
+            "transaction fees", "block times", "confirmations", "orphaned blocks", "hard forks", "soft forks", 
+            "hash rates", "mining difficulty", "validators", "nodes", "sharding", "rollups", "bridges", 
+            "multisigs", "hardware wallets", "seed phrases", "private keys", "public keys", "addresses", 
+            "QR codes", "scammers", "hackers", "phishing", "malware", "ransomware", "regulators", "the SEC", 
+            "taxes", "capital gains", "losses", "liquidations", "margin calls", "leverage", "futures", 
+            "options", "perpetuals", "swaps", "DEXs", "CEXs", "OTC", "arbitrage", "market makers", "whales", 
+            "dolphins", "minnows", "plankton", "shrimps", "crabs", "bears", "bulls", "pigs", "sheep", 
+            "wolves", "unicorns", "pegasi", "dragons", "aliens", "time travelers", "Bogdanoff", "Sminem", 
+            "Pepe", "Doge", "Shiba", "Floki", "Elon", "CZ", "Vitalik", "Satoshi", "Gensler", "Powell", 
+            "Yellen", "inflation", "deflation", "stagflation", "recession", "depression", "hyperinflation", 
+            "printing money", "interest rates", "quantitative easing", "tightening", "pivots", "fud", "fomo", 
+            "hodl", "buidl", "safu", "rekt", "wagmi", "ngmi", "ct", "crypto twitter", "discord", "telegram", 
+            "reddit", "4chan", "biz", "influencers", "shills", "bots", "paid groups", "signals", "alpha", 
+            "beta", "sigma", "grindset", "mindset", "vibe", "energy", "frequency", "resonance", "alignment", 
+            "manifestation", "law of attraction", "karma", "fate", "destiny", "luck", "chance", "probability", 
+            "statistics", "math", "logic", "reason", "emotion", "fear", "greed", "hope", "despair", "anger", 
+            "joy", "pain", "pleasure", "suffering", "peace", "war", "politics", "religion", "philosophy", 
+            "science", "art", "music", "movies", "books", "games", "sports", "nature", "weather", "climate", 
+            "pollution", "disease", "health", "wealth", "poverty", "equality", "justice", "freedom", 
+            "sovereignty", "privacy", "anonymity", "security", "censorship", "control", "power", "corruption", 
+            "conspiracy", "truth", "lies", "reality", "simulation", "matrix", "metaverse", "NFTs", "jpegs", 
+            "right click save", "metadata", "rarity", "traits", "collections", "floors", "sweeps", "mints", 
+            "reveals", "allowlists", "snapshots", "airdrops", "claims", "vesting", "cliffs", "unlocks", 
+            "circulating supply", "max supply", "burns", "buybacks", "dividends", "reflections", "taxes", 
+            "utility", "governance", "voting", "proposals", "DAOs", "treasuries", "grants", "bounties", 
+            "hackathons", "conferences", "meetups", "parties", "yachts", "lambos", "moon", "mars", 
+            "galaxies", "universe", "multiverse", "dimensions", "timelines", "past", "present", "future", 
+            "eternity", "infinity", "zero", "one", "binary", "code", "algorithms", "AI", "machine learning", 
+            "neural networks", "singularity", "robots", "cyborgs", "transhumanism", "evolution", "genetics", 
+            "DNA", "biology", "physics", "chemistry", "quantum mechanics", "string theory", "relativity", 
+            "gravity", "electromagnetism", "light", "sound", "vibration", "energy", "matter", "antimatter", 
+            "dark matter", "dark energy", "black holes", "wormholes", "big bang", "entropy", "chaos", 
+            "order", "complexity", "emergence", "consciousness", "subconscious", "unconscious", "dreams", 
+            "nightmares", "sleep", "awake", "woke", "red pill", "blue pill", "black pill", "white pill", 
+            "based", "cringe", "normies", "NPCs", "main characters", "heroes", "villains", "protagonists", 
+            "antagonists", "side characters", "extras", "background noise", "static", "silence", "noise", 
+            "signals", "transmissions", "messages", "codes", "ciphers", "puzzles", "riddles", "mysteries", 
+            "secrets", "easter eggs", "glitches", "bugs", "exploits", "hacks", "cheats", "mods", "patches", 
+            "updates", "upgrades", "downgrades", "versions", "forks", "branches", "merges", "commits", 
+            "pushes", "pulls", "requests", "issues", "bugs", "features", "documentation", "support", 
+            "customer service", "refunds", "returns", "warranties", "guarantees", "promises", "vows", 
+            "oaths", "contracts", "agreements", "terms", "conditions", "policies", "rules", "regulations", 
+            "laws", "crimes", "punishments", "prisons", "jails", "courts", "judges", "juries", "lawyers", 
+            "defendants", "plaintiffs", "witnesses", "evidence", "proof", "doubt", "belief", "faith", 
+            "skepticism", "cynicism", "optimism", "pessimism", "realism", "idealism", "pragmatism", 
+            "nihilism", "existentialism", "absurdism", "stoicism", "hedonism", "asceticism", "minimalism", 
+            "maximalism", "materialism", "spiritualism", "mysticism", "occultism", "esotericism", "magic", 
+            "alchemy", "astrology", "tarot", "numerology", "divination", "prophecy", "fortune", "destiny", 
+            "fate", "karma", "reincarnation", "afterlife", "heaven", "hell", "purgatory", "limbo", "void", 
+            "abyss", "nothingness", "everything", "all", "none", "some", "few", "many", "most", "least", 
+            "more", "less", "high", "low", "up", "down", "left", "right", "forward", "backward", "in", 
+            "out", "over", "under", "through", "around", "between", "among", "within", "without", "before", 
+            "after", "during", "while", "when", "where", "why", "how", "who", "what", "which", "that", 
+            "this", "those", "these", "it", "he", "she", "they", "we", "you", "I", "me", "my", "mine", 
+            "yours", "theirs", "ours", "his", "hers", "its", "employment history", "credit score", 
+            "student loans", "mortgages", "rent", "bills", "utilities", "groceries", "food", "water", 
+            "air", "shelter", "clothing", "fashion", "trends", "style", "aesthetics", "beauty", "ugly", 
+            "handsome", "pretty", "cute", "hot", "cold", "warm", "cool", "dry", "wet", "hard", "soft", 
+            "rough", "smooth", "sharp", "dull", "bright", "dark", "light", "heavy", "fast", "slow", 
+            "loud", "quiet", "big", "small", "tall", "short", "fat", "thin", "wide", "narrow", "thick", 
+            "long", "deep", "shallow", "high", "low", "rich", "poor", "smart", "dumb", "stupid", "idiot", 
+            "genius", "midwit", "brainlet", "smoothbrain", "wrinklebrain", "IQ", "EQ", "knowledge", 
+            "wisdom", "intelligence", "stupidity", "ignorance", "arrogance", "humility", "pride", "envy", 
+            "gluttony", "lust", "sloth", "greed", "wrath", "virtue", "vice", "sin", "good", "evil", 
+            "bad", "wrong", "right", "true", "false", "real", "fake", "authentic", "genuine", "synthetic", 
+            "artificial", "natural", "organic", "GMO", "chemicals", "pollution", "plastic", "waste", 
+            "garbage", "trash", "rubbish", "junk", "scrap", "debris", "ruins", "remains", "ashes", "dust", 
+            "dirt", "soil", "mud", "sand", "stone", "rock", "metal", "wood", "glass", "paper", "plastic", 
+            "cloth", "leather", "skin", "bone", "blood", "sweat", "tears", "pain", "suffering", "misery", 
+            "agony", "torture", "death", "life", "birth", "growth", "decay", "rot", "fester", "heal", 
+            "cure", "medicine", "drugs", "alcohol", "tobacco", "caffeine", "sugar", "fat", "carbs", 
+            "protein", "vitamins", "minerals", "supplements", "steroids", "hormones", "surgery", "implants", 
+            "prosthetics", "enhancements", "upgrades", "downgrades", "maintenance", "repair", "service", 
+            "cleaning", "washing", "showering", "bathing", "grooming", "shaving", "cutting", "trimming", 
+            "brushing", "flossing", "wiping", "scratching", "itching", "sneezing", "coughing", "breathing", 
+            "sleeping", "dreaming", "waking", "walking", "running", "jumping", "flying", "swimming", 
+            "driving", "riding", "sailing", "flying", "traveling", "moving", "staying", "leaving", 
+            "arriving", "departing", "returning", "visiting", "hosting", "guest", "host", "friend", 
+            "enemy", "family", "stranger", "neighbor", "citizen", "alien", "human", "animal", "plant", 
+            "fungus", "bacteria", "virus", "parasite", "symbiote", "organism", "cell", "atom", "molecule", 
+            "particle", "wave", "field", "force", "gravity", "magnetism", "electricity", "nuclear", 
+            "solar", "wind", "hydro", "geo", "bio", "chemical", "kinetic", "potential", "thermal", 
+            "mechanical", "electrical", "magnetic", "radiant", "sonic", "gravitational", "elastic", 
+            "ionization", "nuclear", "chromatic", "achromatic", "visible", "invisible", "audible", 
+            "inaudible", "tangible", "intangible", "knowable", "unknowable", "possible", "impossible", 
+            "probable", "improbable", "certain", "uncertain", "definite", "indefinite", "finite", 
+            "infinite", "limit", "bound", "edge", "center", "middle", "start", "end", "beginning", 
+            "finish", "alpha", "omega", "genesis", "revelation", "apocalypse", "rapture", "judgment", 
+            "salvation", "damnation", "redemption", "forgiveness", "mercy", "grace", "love", "hate", 
+            "indifference", "apathy", "empathy", "sympathy", "compassion", "pity", "cruelty", "kindness", 
+            "generosity", "greed", "sharing", "stealing", "giving", "taking", "buying", "selling", 
+            "trading", "bartering", "swapping", "exchanging", "holding", "dropping", "keeping", "losing", 
+            "finding", "seeking", "hiding", "revealing", "showing", "telling", "asking", "answering", 
+            "questioning", "doubting", "believing", "knowing", "thinking", "feeling", "sensing", 
+            "perceiving", "observing", "watching", "listening", "hearing", "smelling", "tasting", 
+            "touching", "holding", "grasping", "releasing", "letting go", "hanging on", "clinging", 
+            "falling", "rising", "floating", "sinking", "flying", "soaring", "diving", "climbing", 
+            "crawling", "walking", "running", "standing", "sitting", "lying", "kneeling", "bowing", 
+            "praying", "meditating", "contemplating", "reflecting", "ignoring", "acknowledging", "noticing", 
+            "seeing", "looking", "staring", "glaring", "peeking", "gazing", "watching", "viewing"
+        ];
+
+        // LOGIC: Generate 1000 lines
+        const container = document.getElementById('list-container');
+        const totalLines = 1000;
+
+        for (let i = 0; i < totalLines; i++) {
+            const div = document.createElement('div');
+            div.classList.add('line');
+            
+            // Randomly select one word/phrase from the massive array
+            // If you want them in order, use phrases[i % phrases.length]
+            // We use random for pure chaos.
+            const subject = phrases[Math.floor(Math.random() * phrases.length)];
+            
+            div.innerText = `> The Wojak doesn’t concern himself with ${subject}`;
+            container.appendChild(div);
+        }
+
+        // COPY CA FUNCTION
+        function copyCA() {
+            const ca = "8xHt...9jKm"; 
+            navigator.clipboard.writeText(ca);
+            
+            const el = document.querySelector('.ca-display');
+            const original = el.innerText;
+            el.innerText = "COPIED";
+            el.style.color = "#fff";
+            
+            setTimeout(() => {
+                el.innerText = original;
+                el.style.color = "";
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
